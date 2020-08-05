@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Rust IPFS</title>
+    <meta name="description" content="" />
+
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./vendor/enlighterjs-3.0.0/enlighterjs.min.css" />
+  </head>
+  <body>
+    <div id="values">
+      <div class="value1">--value1</div>
+      <div class="value2">--value2</div>
+      <div class="value3">--value3</div>
+      <div class="value4">--value4</div>
+      <div class="value5">--value5</div>
+      <div class="value6">--value6</div>
+      <div class="accent1">--accent1</div>
+      <div class="accent2">--accent2</div>
+      <div class="accent3">--accent3</div>
+      <div class="accent4">--accent4</div>
+      <div class="accent5">--accent5</div>
+      <div class="accent6">--accent6</div>
+      <div class="logo1">--logo1</div>
+      <div class="logo2">--logo2</div>
+      <div class="logo3">--logo3</div>
+      <div class="logo4">--logo4</div>
+      <div class="logo5">--logo5</div>
+      <div class="logo6">--logo6</div>
+    </div>
+    <header>
+      <div>
+        <h1>
+          <a aria-label="home" href="#">
+            <img alt="Rust IPFS Logo" src="./img/rust-ipfs-logo-64w.png" />
+            &nbsp;Rust IPFS
+          </a>
+        </h1>
+
+        <nav>
+          <a target="_blank" href="https://docs.rs/ipfs">Docs</a>
+          <a target="_blank" href="https://github.com/rs-ipfs/rust-ipfs">GitHub</a>
+          <a target="_blank" href="https://medium.com/equilibriumco/rustipfs/home">Blog</a>
+        </nav>
+
+        <a class="cta" href="#support">Support</a>
+      </div>
+    </header>
+
+    <section id="hero">
+      <h2>
+        The performance and efficiency of <em>Rust</em>,
+        and the decentralized power of <em>IPFS</em>.
+      </h2>
+      <h2>Together at last.</h2>
+      <a class="cta" href="#getting-started">Get Started</a>
+    </section>
+
+    <section id="features">
+      <div>
+        <div>
+          <h3>UnixFS Support</h3>
+          <p>
+            Easily encode your content and add, get, and
+            cat to your heart's content
+          </p>
+        </div>
+        <div>
+          <h3>Global Swarming</h3>
+          <p>
+            Connect to the global IPFS network using the 
+            bootstrap peers that you're used to
+          </p>
+        </div>
+        <div>
+          <h3>Canonical HTTP APIs</h3>
+          <p>
+            If your application already uses the IPFS
+            HTTP APIs, you can easily switch to Rust IPFS
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="getting-started">
+      <h2>Getting Started</h2>
+      <div id="cargo-install">
+        <p>Install via Cargo, initialize, and run the daemon</p>
+        <pre data-enlighter-language="shell">
+$ cargo install ipfs-http
+$ ipfs-http init --bits 4096 --profile test
+$ ipfs-http daemon &amp;
+...
+API listening on /ip4/127.0.0.1/tcp/33801
+daemon is running
+
+$ curl 127.0.0.1:33801/api/v0/id | jq .ID
+"QmRJUsPnZH5Pn3dBRDDiEV1JBjLB1KTeFhspYwFVk8czS1"
+        </pre>
+      </div>
+      <div>
+        <p>...or use it in your Rust code</p>
+        <pre data-enlighter-language="rust">
+use ipfs::{IpfsOptions, TestTypes, UninitializedIpfs};
+
+#[async_std::main]
+async fn main() {
+    let options = IpfsOptions::&lt;TestTypes&gt;::default();
+
+    // Start daemon and initialize repo
+    let (ipfs, fut) = UninitializedIpfs::new(options).await.start().await.unwrap();
+
+    let cid = "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG";
+    let stream = ipfs.cat_unixfs(cid, None).await.unwrap_or_else(|e| {
+        eprintln!("Error: {}", e);
+        exit(1);
+    });
+
+    let mut stdout = async_std::io::stdout();
+    loop {
+        match stream.next().await {
+            Some(Ok(bytes)) => {
+                stdout.write_all(&bytes).await.unwrap();
+            },
+            Some(Err(e)) => {
+                eprintln!("Error: {}", e);
+                exit(1);
+            },
+            None => break,
+        }
+    }
+}
+        </pre>
+      </div>
+      <a class="top" href="#">▲</a>
+    </section>
+
+    <!--
+    <section id="examples">
+      <h2>See it in action</h2>
+      <div>
+        <div class="card">
+          <img src="./img/IPFS-Substrate.png" alt="IPFS and Substrate Logos" />
+          <h3>Rust IPFS with Substrate</h3>
+          <a role="button" href="#">Learn More</a>
+        </div>
+        <div class="card">
+          <h3>Rust IPFS with OrbitDB</h3>
+          <a role="button" href="#">Learn More</a>
+        </div>
+      </div>
+      <a class="top" href="#">▲</a>
+    </section>
+    -->
+
+    <section id="support">
+      <h2>This project is supported by</h2>
+
+      <div class="logos">
+        <img src="./img/logo-vertical.png" alt="Equilibrium" />
+        <img src="./img/logo-protocol.png" alt="Protocol Labs" />
+        <img src="./img/logo-web3.png" alt="Web3 Foundation" />
+      </div>
+
+      <div>
+        <p>
+          Rust IPFS is supported by Equilibrium, Protocol Labs, the Web3 Foundation,
+          and YOU. If you find this work useful, please consider becoming a financial
+          contributor on <a href="https://opencollective.com/rs-ipfs">OpenCollective</a>.
+        </p>
+      </div>
+
+      <a class="top" href="#">▲</a>
+    </section>
+
+    <footer>
+      <div>
+        <span>This website copyright 2020 Equilibrium.</span>
+        <span>Rust IPFS is dual licensed under the MIT / Apache License.</span>
+      </div>
+    </footer>
+
+    <script src="./vendor/enlighterjs-3.0.0/enlighterjs.min.js"></script>
+    <script type="text/javascript">
+      EnlighterJS.init('pre', 'code', {
+        language : 'rust',
+        theme: 'droide',
+        indent : 4
+      });
+    </script>
+</body>
+  </body>
+</html>
