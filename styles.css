@@ -248,9 +248,22 @@ section#support > .logos > img {
   grid-gap: 2rem;
 }
 
-
 @media (max-width: 600px) {
   #features > div {
     display: block;
   }
+}
+
+#features > div > div > img {
+  max-height: 250px;
+}
+
+#features > div > div {
+  text-align: center;
+}
+
+#features > div > div > p {
+  text-align: left;
+  font-size: 1.1rem;
+  padding: 0.5rem;
 }
