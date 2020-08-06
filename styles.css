@@ -107,13 +107,28 @@ body > header, body > footer {
   font-family: "Cabin", sans-serif;
 }
 
-body > header > h1 {
+@media (max-width: 600px) {
+  body > footer { font-size: 0.8rem; }
+}
+
+body > header > div > h1 {
   margin: 0;
 }
+
+@media (max-width: 600px) {
+  body > header > div > h1 > a > span { display: none; }
+  body > header > div > nav > a { font-size: 1rem; }
+  body > header > div > a.cta { font-size: 1rem; }
+}
+
 body > header > div > h1 > a {
   display: flex;
   align-items: center;
   color: var(--off-white);
+}
+
+body > header > div > h1 > a > img {
+  margin-right: 1rem;
 }
 
 body > header a {
@@ -176,6 +191,13 @@ body > section#getting-started > div {
   display: grid;
   grid-template-columns: 200px 1fr;
   grid-gap: 1rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 600px) {
+  body > section#getting-started > div {
+    display: block;
+  }
 }
 
 body > section#getting-started {
@@ -202,10 +224,10 @@ a.top {
   display: block;
 }
 
-.enlighter {
-  box-shadow: 2px 2px 6px #000000 !important;
-}
+/* !important is here because I'm overriding enlighter defaults
+ * which are applied by JS on page load */
 .enlighter-n0, .enlighter-n1 { color: #007f7f !important; }
+.enlighter-default { overflow: scroll !important ;}
 
 section#support > .logos {
   padding: 2rem 0;
@@ -224,4 +246,11 @@ section#support > .logos > img {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 2rem;
+}
+
+
+@media (max-width: 600px) {
+  #features > div {
+    display: block;
+  }
 }
