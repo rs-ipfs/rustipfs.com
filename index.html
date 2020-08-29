@@ -107,32 +107,48 @@ $ curl 127.0.0.1:33801/api/v0/id | jq .ID
       <div>
         <p>...or use it in your Rust code</p>
         <pre data-enlighter-language="rust">
-use ipfs::{IpfsOptions, TestTypes, UninitializedIpfs};
+use ipfs::{IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
+use std::convert::TryFrom;
+use std::process::exit;
+use tokio::prelude::*;
+use tokio::stream::StreamExt;
 
-#[async_std::main]
+// quick-start dependencies:
+// ipfs = { git = "https://github.com/rs-ipfs/rust-ipfs.git" }
+// tokio = { version = "0.2", features = ["full"] }
+
+#[tokio::main]
 async fn main() {
-    let options = IpfsOptions::&lt;TestTypes&gt;::default();
+    let options = IpfsOptions::default();
 
     // Start daemon and initialize repo
-    let (ipfs, fut) = UninitializedIpfs::new(options).await.start().await.unwrap();
+    let (ipfs, fut) = UninitializedIpfs::<TestTypes>::new(options, None)
+        .await
+        .start()
+        .await
+        .unwrap();
 
-    let cid = "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG";
-    let stream = ipfs.cat_unixfs(cid, None).await.unwrap_or_else(|e| {
+    tokio::spawn(fut);
+
+    let path = IpfsPath::try_from("QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme").unwrap();
+    let stream = ipfs.cat_unixfs(path, None).await.unwrap_or_else(|e| {
         eprintln!("Error: {}", e);
         exit(1);
     });
 
-    let mut stdout = async_std::io::stdout();
+    tokio::pin!(stream);
+
+    let mut stdout = tokio::io::stdout();
     loop {
         match stream.next().await {
-            Some(Ok(bytes)) => {
-                stdout.write_all(&bytes).await.unwrap();
-            },
-            Some(Err(e)) => {
+            Some(Ok(bytes)) =&gt; {
+                stdout.write_all(&amp;bytes).await.unwrap();
+            }
+            Some(Err(e)) =&gt; {
                 eprintln!("Error: {}", e);
                 exit(1);
-            },
-            None => break,
+            }
+            None =&gt; break,
         }
     }
 }
