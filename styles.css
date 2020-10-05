@@ -92,12 +92,29 @@ img { max-width: 100%; }
 p { font-size: 1.2rem; }
 a { color: var(--logo-dark); text-decoration: none; font-weight: bold; }
 
-body > header > div, body > section > div, body > footer > div {
+body > header > div, body > section > div, body > footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 1024px;
   margin: 0 auto;
+}
+
+body > footer {
+  align-items: flex-start;
+}
+
+body > footer > div {
+  max-width: 50%;
+}
+
+body > footer > div > small {
+  display: block;
+  font-size: 0.75em;
+}
+
+body > footer > div:last-child {
+  text-align: right;
 }
 
 body > header, body > footer {
