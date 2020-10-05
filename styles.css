@@ -86,21 +86,26 @@ body {
   font-family: "Cabin", sans-serif;
 }
 
+/* Inline Styles */
+
 h1,h2 { font-family: "Cabin Bold", sans-serif }
 h3,h4,h5,h6 { font-family: "Cabin", sans-serif }
 img { max-width: 100%; }
 p { font-size: 1.2rem; }
 a { color: var(--logo-dark); text-decoration: none; font-weight: bold; }
+code { background: var(--value1); font-size: 90%; padding: 0 0.2rem; }
 
-body > header > div, body > section > div, body > footer {
+
+body > header > div, body > section > div {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1024px;
-  margin: 0 auto;
 }
 
 body > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   align-items: flex-start;
 }
 
@@ -195,8 +200,12 @@ section#hero > h2 > em {
   background: var(--accent2);
 }
 
-body > section > h2 {
-  margin: 0 auto;
+body > section > h2,
+body > header > div,
+body > section > div,
+body > section > p {
+  margin-left: auto;
+  margin-right: auto;
   max-width: 1024px;
 }
 
