@@ -87,22 +87,8 @@
 
     <section id="getting-started">
       <h2>Getting Started</h2>
-      <div id="cargo-install">
-        <p>Install via Cargo, initialize, and run the daemon</p>
-        <pre data-enlighter-language="shell">
-$ cargo install ipfs-http
-$ ipfs-http init --bits 4096 --profile test
-$ ipfs-http daemon &amp;
-...
-API listening on /ip4/127.0.0.1/tcp/33801
-daemon is running
-
-$ curl 127.0.0.1:33801/api/v0/id | jq .ID
-"QmRJUsPnZH5Pn3dBRDDiEV1JBjLB1KTeFhspYwFVk8czS1"
-        </pre>
-      </div>
+      <p>Using IPFS in your Rust code is simple and only requires a few dependencies:</p>
       <div>
-        <p>...or use it in your Rust code</p>
         <pre data-enlighter-language="rust">
 use ipfs::{IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
 use std::convert::TryFrom;
