@@ -172,24 +172,29 @@ section#hero > h2 {
   max-width: 26rem;
   text-align: center;
   text-shadow: 1px 1px 2px var(--logo-dark);
-  text-shadow: 0px 0px 30px var(--off-white);
+  text-shadow: 0px 0px 30px var(--logo-ultra-light);
 }
 section#hero > h2 > em {
   font-style: inherit;
 }
 
-.cta {
-  text-decoration: none;
-  font-family: "Cabin Bold", sans-serif;
-  color: var(--off-black);
-  font-weight: bold;
+.cta > a {
   font-size: 1.25rem;
-  background: var(--accent2);
-  background-blend-mode: overlay;
-  border: 2px solid var(--off-white);
+  margin: 0 0.9rem;
   border-radius: 0.25rem;
   padding: 0.5rem;
-  margin: 0 0.5rem;
+  background-blend-mode: overlay;
+  font-weight: bold;
+  color: var(--off-black);
+  text-decoration: none;
+  background: var(--logo-ultra-light);
+}
+.cta > a:hover {
+  color: black;
+  box-shadow: 0px 0px 50px var(--logo-highlight);
+}
+.cta > a.primary {
+  background: var(--accent2);
 }
 
 body > section > h2 {
