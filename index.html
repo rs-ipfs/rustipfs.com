@@ -111,33 +111,37 @@
 
     <section id="getting-started">
       <h2>Getting Started</h2>
-      <p>Using IPFS in your Rust code is simple and only requires a few dependencies:</p>
-      <div>
-        <pre data-enlighter-language="rust">
+      <p>
+        First, add <code>ipfs</code> and <code>tokio</code>
+        to your <strong>Cargo.toml</strong> file:
+      </p>
+      <pre data-enlighter-language="toml">
+[dependencies]
+ipfs = "0.2.0"
+tokio = { version = "0.2", features = ["full"] }
+      </pre>
+      <p>Then, in your <strong>src/main.rs</strong>:</p>
+      <pre data-enlighter-language="rust">
 use ipfs::{IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
 use std::convert::TryFrom;
 use std::process::exit;
 use tokio::prelude::*;
 use tokio::stream::StreamExt;
 
-// quick-start dependencies:
-// ipfs = { git = "https://github.com/rs-ipfs/rust-ipfs.git" }
-// tokio = { version = "0.2", features = ["full"] }
-
 #[tokio::main]
 async fn main() {
-    let options = IpfsOptions::default();
+    // Load in some default testing options
+    let options = IpfsOptions::inmemory_with_generated_keys();
+
+    // TODO: Bootstrap
 
     // Start daemon and initialize repo
-    let (ipfs, fut) = UninitializedIpfs::<TestTypes>::new(options, None)
-        .await
-        .start()
-        .await
-        .unwrap();
+    let (ipfs, fut): (Ipfs<TestTypes>, _) = UninitializedIpfs::new(options).start().await.unwrap();
 
     tokio::spawn(fut);
 
     let path = IpfsPath::try_from("QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme").unwrap();
+
     let stream = ipfs.cat_unixfs(path, None).await.unwrap_or_else(|e| {
         eprintln!("Error: {}", e);
         exit(1);
@@ -159,8 +163,7 @@ async fn main() {
         }
     }
 }
-        </pre>
-      </div>
+      </pre>
       <a class="top" href="#">▲</a>
     </section>
 
@@ -222,7 +225,7 @@ async fn main() {
 
     <script src="./vendor/enlighterjs-3.0.0/enlighterjs.min.js"></script>
     <script type="text/javascript">
-      EnlighterJS.init('pre', 'code', {
+      EnlighterJS.init('pre', null, {
         language : 'rust',
         theme: 'droide',
         indent : 4
