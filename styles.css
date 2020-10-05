@@ -83,7 +83,7 @@ body {
   margin: 0;
   background: var(--off-white);
   color: var(--off-black);
-  font-family: Georgia,'Times New Roman',serif;
+  font-family: "Cabin", sans-serif;
 }
 
 h1,h2 { font-family: "Cabin Bold", sans-serif }
@@ -121,7 +121,6 @@ body > header, body > footer {
   padding: 1rem;
   background: var(--off-black);
   color: var(--off-white);
-  font-family: "Cabin", sans-serif;
 }
 
 @media (max-width: 600px) {
@@ -150,7 +149,6 @@ body > header > div > h1 > a > img {
 
 body > header a {
   text-decoration: none;
-  font-family: Cabin, sans-serif;
   color: var(--off-white);
 }
 
