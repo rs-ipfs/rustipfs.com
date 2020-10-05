@@ -184,14 +184,8 @@ body > section {
   padding: 1rem;
   background: var(--page-background);
 }
-
 body > section#getting-started > div {
-  max-width: 1024px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  grid-gap: 1rem;
-  align-items: flex-start;
 }
 
 @media (max-width: 600px) {
