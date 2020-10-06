@@ -115,7 +115,7 @@ async fn main() {
     // TODO: Bootstrap
 
     // Start daemon and initialize repo
-    let (ipfs, fut): (Ipfs<TestTypes>, _) = UninitializedIpfs::new(options).start().await.unwrap();
+    let (ipfs, fut): (Ipfs&lt;TestTypes&gt;, _) = UninitializedIpfs::new(options).start().await.unwrap();
 
     tokio::spawn(fut);
 
