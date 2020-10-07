@@ -101,34 +101,37 @@ tokio = { version = "0.2", features = ["full"] }
       </pre>
       <p>Then, in your <strong>src/main.rs</strong>:</p>
       <pre data-enlighter-language="rust">
-use ipfs::{IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
-use std::convert::TryFrom;
+use futures::pin_mut;
+use futures::stream::StreamExt; // needed for StreamExt::next
+use ipfs::{Ipfs, IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
 use std::process::exit;
-use tokio::prelude::*;
-use tokio::stream::StreamExt;
+use tokio::io::AsyncWriteExt;
 
 #[tokio::main]
 async fn main() {
-    // Load in some default testing options
-    let options = IpfsOptions::inmemory_with_generated_keys();
+    // Initialize an in-memory repo and start a daemon.
+    let opts = IpfsOptions::inmemory_with_generated_keys();
+    let (ipfs, fut): (Ipfs&lt;TestTypes&gt;, _) = UninitializedIpfs::new(opts).start().await.unwrap();
 
-    // TODO: Bootstrap
+    // Spawn the background task
+    tokio::task::spawn(fut);
 
-    // Start daemon and initialize repo
-    let (ipfs, fut): (Ipfs&lt;TestTypes&gt;, _) = UninitializedIpfs::new(options).start().await.unwrap();
+    // Restore the bootstrappers for the global swarm
+    ipfs.restore_bootstrappers().await.unwrap();
 
-    tokio::spawn(fut);
-
-    let path = IpfsPath::try_from("QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG/readme").unwrap();
+    // Get the IPFS README
+    let path = "/ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme"
+        .parse::&lt;IpfsPath&gt;()
+        .unwrap();
 
     let stream = ipfs.cat_unixfs(path, None).await.unwrap_or_else(|e| {
         eprintln!("Error: {}", e);
         exit(1);
     });
 
-    tokio::pin!(stream);
-
+    pin_mut!(stream);
     let mut stdout = tokio::io::stdout();
+
     loop {
         match stream.next().await {
             Some(Ok(bytes)) =&gt; {
