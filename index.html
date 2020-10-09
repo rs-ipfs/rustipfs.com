@@ -122,11 +122,9 @@ tokio = { version = "0.2", features = ["full"] }
       </pre>
       <p>Then, in your <strong>src/main.rs</strong>:</p>
       <pre data-enlighter-language="rust">
-use futures::pin_mut;
-use futures::stream::StreamExt; // needed for StreamExt::next
 use ipfs::{Ipfs, IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
 use std::process::exit;
-use tokio::io::AsyncWriteExt;
+use tokio::{io::AsyncWriteExt, stream::StreamExt};
 
 #[tokio::main]
 async fn main() {
@@ -137,7 +135,7 @@ async fn main() {
     // Spawn the background task
     tokio::task::spawn(fut);
 
-    // Restore the bootstrappers for the global swarm
+    // Restore the default bootstrappers to enable content discovery
     ipfs.restore_bootstrappers().await.unwrap();
 
     // Get the IPFS README
@@ -150,7 +148,8 @@ async fn main() {
         exit(1);
     });
 
-    pin_mut!(stream);
+    tokio::pin!(stream);
+
     let mut stdout = tokio::io::stdout();
 
     loop {
