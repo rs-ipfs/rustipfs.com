@@ -252,6 +252,15 @@ a.top {
 .enlighter-n0, .enlighter-n1 { color: #007f7f !important; }
 .enlighter-default { overflow: scroll !important ;}
 
+body > section#further-reading {
+  background: var(--accent2);
+  background-blend-mode: overlay;
+}
+
+body > section#further-reading > p > a {
+  color: var(--logo-dark)
+}
+
 section#support > .logos {
   padding: 2rem 0;
   display: grid;
