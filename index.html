@@ -116,14 +116,16 @@
       </p>
       <pre data-enlighter-language="toml">
 [dependencies]
-ipfs = "0.2.1"
-tokio = { version = "0.2", features = ["full"] }
+ipfs = { git = "https://github.com/rs-ipfs/rust-ipfs" }
+tokio = { version = "1", features = ["full"] }
+tokio-stream = "0.1"
       </pre>
       <p>Then, in your <strong>src/main.rs</strong>:</p>
       <pre data-enlighter-language="rust">
 use ipfs::{Ipfs, IpfsOptions, IpfsPath, TestTypes, UninitializedIpfs};
 use std::process::exit;
-use tokio::{io::AsyncWriteExt, stream::StreamExt};
+use tokio::io::AsyncWriteExt;
+use tokio_stream::StreamExt;
 
 #[tokio::main]
 async fn main() {
